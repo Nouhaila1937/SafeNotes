@@ -1,4 +1,8 @@
 # Node modules
 node_modules/
 
- 
+# Firebase admin private key
+secrets/
+
+# Environment variables
+.env

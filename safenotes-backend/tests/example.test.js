@@ -1,0 +1,4 @@
+// example.test.js
+test('addition works', () => {
+  expect(1 + 1).toBe(2);
+});

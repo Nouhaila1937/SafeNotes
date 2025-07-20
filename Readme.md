@@ -1,4 +1,6 @@
- ## 1. Initialisation du projet
+### La branche Main est celle de production
+### La branche Dev est celle de développement et test
+## 1. Initialisation du projet
 ```
 npm init -y
 npm install express mongoose dotenv bcryptjs jsonwebtoken cors
@@ -28,5 +30,10 @@ safe-notes-backend/
 npm install firebase-admin
 
 ```
+### 4. Installation de test
 
+```
+npm install --save-dev jest
+
+```
 
