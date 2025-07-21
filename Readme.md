@@ -30,10 +30,12 @@ safe-notes-backend/
 npm install firebase-admin
 
 ```
-### 4. Installation de test
+### 4. Installation de jest et de superset pour le test
 
 ```
+
 npm install --save-dev jest
+npm install --save-dev supertest
 
 ```
 

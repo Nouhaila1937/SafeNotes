@@ -9,6 +9,7 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    environment: dev #lier l'environement pour que le workflow aura main sur les secrets dans github
 
     steps:
       - name: Checkout code
