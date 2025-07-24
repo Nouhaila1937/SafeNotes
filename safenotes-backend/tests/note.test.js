@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('../server'); // Chemin vers ton fichier Express principal
 const mongoose = require('mongoose');
+const app = require('../server'); // Chemin vers ton fichier Express principal
 const Note = require('../models/Note'); // Assure-toi que c'est correct
 
 beforeAll(async () => {

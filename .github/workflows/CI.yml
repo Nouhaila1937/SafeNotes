@@ -24,7 +24,7 @@ jobs:
         run: npm install
 
       - name: Inject environment variables
-        run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> $GITHUB_ENV
+        run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}"
 
       - name: Run tests
         run: npm test
