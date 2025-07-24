@@ -1,7 +1,7 @@
 // controllers/noteController.js
 
 const Note = require('../models/Note');
-const { encrypt, decrypt } = require('../controllers/notesController');
+const { encrypt, decrypt } = require('./cryptoHelper');
 
 // Ajouter une note
 exports.createNote = async (req, res) => {
