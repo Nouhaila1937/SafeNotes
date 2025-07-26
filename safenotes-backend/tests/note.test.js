@@ -1,3 +1,4 @@
+require("dotenv").config();
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../server'); // Chemin vers ton fichier Express principal
