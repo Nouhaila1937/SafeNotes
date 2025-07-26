@@ -5,7 +5,7 @@ const Note = require('../models/Note'); // Assure-toi que c'est correct
 
 beforeAll(async () => {
   // Connexion à une base de test (MongoDB in-memory ou test DB réelle)
-  await mongoose.connect(process.env.MONGODB_URI, {
+  await mongoose.connect(process.env.Connexion_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });

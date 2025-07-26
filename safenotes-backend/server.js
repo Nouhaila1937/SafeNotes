@@ -12,6 +12,10 @@ app.use(express.json()); // <-- AJOUT OBLIGATOIRE pour parser les requêtes JSON
 
 app.use('/api', notesRouter);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Erreur interne du serveur' });
+});
 
 app.listen(3000, () => {
   console.log("🚀 Serveur lancé sur le port 3000");
