@@ -1,13 +1,12 @@
-// IMPORTANT: Charger dotenv EN PREMIER, avant tout autre require
+// Charger dotenv en premier
 require("dotenv").config();
 
 const request = require('supertest');
 const mongoose = require('mongoose');
-const app = require('../server'); // Maintenant le .env est chargé AVANT server.js
+const app = require('../server');
 const Note = require('../models/Note');
 
 beforeAll(async () => {
-  // Connexion à une base de test
   await mongoose.connect(process.env.Connexion_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -15,7 +14,6 @@ beforeAll(async () => {
 });
 
 afterEach(async () => {
-  // Nettoyer les données après chaque test
   await Note.deleteMany();
 });
 
@@ -27,7 +25,7 @@ describe("📚 Notes API", () => {
   
   it("✅ Doit créer une nouvelle note", async () => {
     const res = await request(app)
-      .post('/notes')
+      .post('/api/notes')
       .send({
         title: "Ma première note",
         content: "Ceci est le contenu de la note"
@@ -39,7 +37,7 @@ describe("📚 Notes API", () => {
 
   it("❌ Doit renvoyer une erreur si les champs sont manquants", async () => {
     const res = await request(app)
-      .post('/notes')
+      .post('/api/notes')
       .send({
         title: ""
       });
@@ -50,7 +48,7 @@ describe("📚 Notes API", () => {
   it("✅ Doit récupérer toutes les notes", async () => {
     await Note.create({ title: "Test", content: "Contenu test" });
 
-    const res = await request(app).get('/notes');
+    const res = await request(app).get('/api/notes');
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBe(1);
@@ -60,7 +58,7 @@ describe("📚 Notes API", () => {
     const note = await Note.create({ title: "Ancien titre", content: "Ancien contenu" });
 
     const res = await request(app)
-      .put(`/notes/${note._id}`)
+      .put(`/api/notes/${note._id}`)
       .send({ title: "Nouveau titre", content: "Nouveau contenu" });
 
     expect(res.statusCode).toBe(200);
@@ -70,14 +68,14 @@ describe("📚 Notes API", () => {
   it("✅ Doit supprimer une note", async () => {
     const note = await Note.create({ title: "À supprimer", content: "Contenu" });
 
-    const res = await request(app).delete(`/notes/${note._id}`);
+    const res = await request(app).delete(`/api/notes/${note._id}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toMatch(/supprimée/i);
   });
 
   it("❌ Doit renvoyer 404 si la note n'existe pas", async () => {
     const fakeId = new mongoose.Types.ObjectId();
-    const res = await request(app).get(`/notes/${fakeId}`);
+    const res = await request(app).get(`/api/notes/${fakeId}`);
 
     expect(res.statusCode).toBe(404);
   });
