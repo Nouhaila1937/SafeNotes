@@ -15,6 +15,7 @@ jobs:
     env:
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
       CRYPTO_SECRET: ${{ secrets.CRYPTO_SECRET }}
+      UIDtest: ${{ secrets.UIDTEST}}
       NODE_ENV: test
 
     steps:

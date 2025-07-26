@@ -28,7 +28,8 @@ describe("📚 Notes API", () => {
       .post('/api/notes')
       .send({
         title: "Ma première note",
-        content: "Ceci est le contenu de la note"
+        content: "Ceci est le contenu de la note",
+        firebaseUid: process.env.UIDTEST
       });
 
     expect(res.statusCode).toBe(201);
@@ -46,7 +47,7 @@ describe("📚 Notes API", () => {
   });
 
   it("✅ Doit récupérer toutes les notes", async () => {
-    await Note.create({ title: "Test", content: "Contenu test" });
+    await Note.create({ title: "Test", content: "Contenu test" ,firebaseUid: process.env.UIDTEST});
 
     const res = await request(app).get('/api/notes');
     expect(res.statusCode).toBe(200);
@@ -55,18 +56,18 @@ describe("📚 Notes API", () => {
   });
 
   it("✅ Doit mettre à jour une note", async () => {
-    const note = await Note.create({ title: "Ancien titre", content: "Ancien contenu" });
+    const note = await Note.create({ title: "Ancien titre", content: "Ancien contenu",firebaseUid: process.env.UIDTEST });
 
     const res = await request(app)
       .put(`/api/notes/${note._id}`)
-      .send({ title: "Nouveau titre", content: "Nouveau contenu" });
+      .send({ title: "Nouveau titre", content: "Nouveau contenu" ,firebaseUid: process.env.UIDTEST});
 
     expect(res.statusCode).toBe(200);
     expect(res.body.title).toBe("Nouveau titre");
   });
 
   it("✅ Doit supprimer une note", async () => {
-    const note = await Note.create({ title: "À supprimer", content: "Contenu" });
+    const note = await Note.create({ title: "À supprimer", content: "Contenu" ,firebaseUid: process.env.UIDTEST});
 
     const res = await request(app).delete(`/api/notes/${note._id}`);
     expect(res.statusCode).toBe(200);
