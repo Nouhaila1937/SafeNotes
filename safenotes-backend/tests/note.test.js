@@ -7,7 +7,7 @@ const app = require('../server');
 const Note = require('../models/Note');
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.Connexion_URI, {
+  await mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
