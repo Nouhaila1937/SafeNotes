@@ -8,7 +8,6 @@ const notesRouter = require('./routes/notesRoutes');
 // Connexion à MongoDB
 connectDB();
 app.use(express.json()); // <-- AJOUT OBLIGATOIRE pour parser les requêtes JSON
-// ... ici tu continues avec tes routes et middlewares
 
 app.use('/api', notesRouter);
 
