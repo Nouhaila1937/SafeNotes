@@ -1,11 +1,13 @@
+// IMPORTANT: Charger dotenv EN PREMIER, avant tout autre require
 require("dotenv").config();
+
 const request = require('supertest');
 const mongoose = require('mongoose');
-const app = require('../server'); // Chemin vers ton fichier Express principal
-const Note = require('../models/Note'); // Assure-toi que c'est correct
+const app = require('../server'); // Maintenant le .env est chargé AVANT server.js
+const Note = require('../models/Note');
 
 beforeAll(async () => {
-  // Connexion à une base de test (MongoDB in-memory ou test DB réelle)
+  // Connexion à une base de test
   await mongoose.connect(process.env.Connexion_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -22,7 +24,7 @@ afterAll(async () => {
 });
 
 describe("📚 Notes API", () => {
-
+  
   it("✅ Doit créer une nouvelle note", async () => {
     const res = await request(app)
       .post('/notes')
@@ -42,7 +44,7 @@ describe("📚 Notes API", () => {
         title: ""
       });
 
-    expect(res.statusCode).toBe(400); // ou 422 selon ta logique
+    expect(res.statusCode).toBe(400);
   });
 
   it("✅ Doit récupérer toutes les notes", async () => {
@@ -80,4 +82,3 @@ describe("📚 Notes API", () => {
     expect(res.statusCode).toBe(404);
   });
 });
-
