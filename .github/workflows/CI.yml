@@ -2,14 +2,20 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ dev ]
+    branche: dev 
   pull_request:
-    branches: [ dev ]
+    branche: dev
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     environment: dev  # lie l'environnement pour que le workflow ait accès aux secrets GitHub
+
+    # IMPORTANT: Définir les variables d'environnement au niveau du job
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      CRYPTO_SECRET: ${{ secrets.CRYPTO_SECRET }}
+      NODE_ENV: test
 
     steps:
       - name: Checkout code
@@ -23,8 +29,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Inject environment variables
-        run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}"
-
+      - name: Verify environment variables (debug)
+        run: |
+          echo "MONGODB_URI is set: $([[ -n "$MONGODB_URI" ]] && echo "Yes" || echo "No")"
+          echo "CRYPTO_SECRET is set: $([[ -n "$CRYPTO_SECRET" ]] && echo "Yes" || echo "No")"
+         
       - name: Run tests
         run: npm test
