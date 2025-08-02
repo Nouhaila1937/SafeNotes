@@ -1,6 +1,8 @@
 // tests/setup.js - Configuration globale des tests
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') }); 
 const mongoose = require('mongoose');
+console.log('Connecting to MongoDB from setup test at:', process.env.MONGODB_URI);
 
 // Mock Firebase Admin pour éviter les erreurs d'authentification
 jest.mock('../config/firebase', () => ({
@@ -16,10 +18,7 @@ jest.mock('../config/firebase', () => ({
 beforeAll(async () => {
   // Connexion à la base de test
   if (mongoose.connection.readyState === 0) {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect(process.env.MONGODB_URI);
   }
 });
 
