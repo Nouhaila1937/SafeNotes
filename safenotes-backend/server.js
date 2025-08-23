@@ -3,12 +3,14 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/db");
 const notesRouter = require('./routes/notesRoutes');
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./swagger-output.json"); // Fichier généré par swagger-autogen
 
 
 // Connexion à MongoDB
 connectDB();
 app.use(express.json()); // <-- AJOUT OBLIGATOIRE pour parser les requêtes JSON
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use('/api', notesRouter);
 
 app.use((err, req, res, next) => {
