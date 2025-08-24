@@ -10,6 +10,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: dev 
+    defaults:
+      run:
+        working-directory: ./Configuration   # Tout run utilise ce répertoire par défaut
+
 
     env:
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
