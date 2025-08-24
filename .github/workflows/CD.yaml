@@ -18,6 +18,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.7
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform plan
+        run: terraform plan
+
+      - name: Terraform format
+        run: terraform fmt
+      
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -39,5 +56,5 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "webapp-Safenotes"   # le nom exact de ton App Service
+          app-name: "webapp-Safenotes"
           package: .
