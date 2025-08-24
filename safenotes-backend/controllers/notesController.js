@@ -9,7 +9,7 @@ exports.createNote = async (req, res) => {
     const note = new Note({
       title: encrypt(req.body.title),
       content: encrypt(req.body.content),
-      firebaseUid: process.env.UIDtest,
+      azureAdId: req.user.oid, // Lier la note à l'utilisateur Azure AD
     });
 
     await note.save();
@@ -20,10 +20,10 @@ exports.createNote = async (req, res) => {
   }
 };
 
-// Obtenir toutes les notes
+// Obtenir toutes les notes de l'utilisateur connecté
 exports.getNotes = async (req, res) => {
   try {
-    const notes = await Note.find({ firebaseUid: process.env.UIDtest });
+    const notes = await Note.find({ azureAdId: req.user.oid });
 
     if (!notes || notes.length === 0) {
       return res.status(404).send("Notes not found");
@@ -33,7 +33,7 @@ exports.getNotes = async (req, res) => {
       _id: note._id,
       title: decrypt(note.title),
       content: decrypt(note.content),
-      firebaseUid: note.firebaseUid,
+      azureAdId: note.azureAdId, // remplacé firebaseUid
       createdAt: note.createdAt,
     }));
 
@@ -44,42 +44,43 @@ exports.getNotes = async (req, res) => {
   }
 };
 
-// Supprimer une note
+// Supprimer une note (vérifier que l'utilisateur est propriétaire)
 exports.deleteNote = async (req, res) => {
   try {
-    const deletedNote = await Note.findByIdAndDelete(req.params.id);
-    if (!deletedNote) {
-      return res.status(404).json({ message: "Note not found" });
+    const note = await Note.findById(req.params.id);
+
+    if (!note) return res.status(404).json({ message: "Note not found" });
+    if (note.azureAdId !== req.user.oid) {
+      return res.status(403).json({ message: "Forbidden: Not your note" });
     }
-    res.json({ message: "Note deleted successfully", note: deletedNote });
+
+    await note.remove();
+    res.json({ message: "Note deleted successfully", note });
   } catch (error) {
     res.status(500).json({ message: "Error deleting note", error });
   }
 };
 
-// Mettre à jour une note
+// Mettre à jour une note (vérifier que l'utilisateur est propriétaire)
 exports.updateNote = async (req, res) => {
   try {
-    const encryptedData = {
-      title: encrypt(req.body.title),
-      content: encrypt(req.body.content),
-    };
+    const note = await Note.findById(req.params.id);
 
-    const updatedNote = await Note.findByIdAndUpdate(
-      req.params.id,
-      encryptedData,
-      { new: true }
-    );
-
-    if (!updatedNote) {
-      return res.status(404).json({ message: "Note not found" });
+    if (!note) return res.status(404).json({ message: "Note not found" });
+    if (note.azureAdId !== req.user.oid) {
+      return res.status(403).json({ message: "Forbidden: Not your note" });
     }
+
+    note.title = encrypt(req.body.title);
+    note.content = encrypt(req.body.content);
+
+    const updatedNote = await note.save();
 
     const decryptedNote = {
       _id: updatedNote._id,
       title: decrypt(updatedNote.title),
       content: decrypt(updatedNote.content),
-      firebaseUid: updatedNote.firebaseUid,
+      azureAdId: updatedNote.azureAdId,
       createdAt: updatedNote.createdAt,
     };
 

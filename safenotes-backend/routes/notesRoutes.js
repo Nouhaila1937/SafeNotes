@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const noteController = require('../controllers/notesController');
-// const verifyToken = require('../middlewares/authMiddleware');
+const verifyAzureToken = require('../middlewares/authMiddleware'); // nouveau middleware
 
-router.post('/notes', /* verifyToken, */ noteController.createNote);
-router.get('/notes', /* verifyToken, */ noteController.getNotes);
-router.delete('/notes/:id', /* verifyToken, */ noteController.deleteNote);
-router.put('/notes/:id', /* verifyToken, */ noteController.updateNote);
+// Toutes les routes sécurisées utilisent verifyAzureToken
+router.post('/notes', verifyAzureToken, noteController.createNote);
+router.get('/notes', verifyAzureToken, noteController.getNotes);
+router.delete('/notes/:id', verifyAzureToken, noteController.deleteNote);
+router.put('/notes/:id', verifyAzureToken, noteController.updateNote);
 
 module.exports = router;

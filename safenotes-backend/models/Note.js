@@ -9,7 +9,7 @@ const noteSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  firebaseUid: {   // <- Clé unique de l'utilisateur dans Firebase
+  azureAdId: {   // <- Identifiant unique de l'utilisateur dans Azure AD (oid)
     type: String,
     required: true,
   },
