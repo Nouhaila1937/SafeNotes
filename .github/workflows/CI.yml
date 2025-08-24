@@ -2,7 +2,7 @@ name: CI Pipeline
 
 on:
   push:
-    branche: dev 
+    #branche: dev 
   pull_request:
     branche: dev
 
