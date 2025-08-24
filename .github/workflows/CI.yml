@@ -1,6 +1,7 @@
 name: CI Pipeline
 
 on:
+  workflow_dispatch:   # Allows manual trigger
   push:
     #branche: dev 
   pull_request:
