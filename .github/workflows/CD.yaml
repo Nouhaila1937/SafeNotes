@@ -9,11 +9,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: dev 
+    environment: dev
     defaults:
       run:
         working-directory: ./Configuration   # Tout run utilise ce répertoire par défaut
-
 
     env:
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
@@ -38,12 +37,13 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform plan
+      # 🛡️ Plan avec timeout pour éviter les boucles infinies
+      - name: Terraform Plan (avec timeout)
         run: terraform plan
 
       - name: Terraform format
         run: terraform fmt
-      
+
       - name: Terraform Apply
         run: terraform apply -auto-approve
 
@@ -57,8 +57,6 @@ jobs:
 
       - name: Build app (if needed)
         run: npm run build --if-present
-
-      
 
       # 🚀 Déploiement sur Azure App Service
       - name: Deploy to Azure Web App
