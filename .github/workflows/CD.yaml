@@ -7,6 +7,21 @@ on:
       - dev   # déploiement seulement quand tu push sur dev
 
 jobs:
+
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.7
+      - name: Terraform Init
+        run: terraform init
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+
   deploy:
     runs-on: ubuntu-latest
     environment: dev 
