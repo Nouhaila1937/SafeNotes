@@ -3,12 +3,15 @@ name: CD Pipeline
 on:
   push:
     branches:
-      - dev   # déploiement seulement quand tu push sur main
+      - dev   # déploiement seulement quand tu push sur dev
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: dev 
+
+    env:
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
 
     steps:
       - name: Checkout code
@@ -29,7 +32,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ env.AZURE_CREDENTIALS }}
 
       # 🚀 Déploiement sur Azure App Service
       - name: Deploy to Azure Web App
@@ -37,4 +40,3 @@ jobs:
         with:
           app-name: "webapp-Safenotes"   # le nom exact de ton App Service
           package: .
-
