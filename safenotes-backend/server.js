@@ -25,8 +25,10 @@ app.use((err, req, res, next) => {
 });
 
 // Démarrage serveur
-app.listen(3000, () => {
-  console.log("🚀 Serveur lancé sur le port 3000");
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
+
 
 module.exports = app;
