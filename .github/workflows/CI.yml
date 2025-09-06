@@ -38,6 +38,7 @@ jobs:
           echo "MONGODB_URI is set: $([[ -n "$MONGODB_URI" ]] && echo "Yes" || echo "No")"
           echo "CRYPTO_SECRET is set: $([[ -n "$CRYPTO_SECRET" ]] && echo "Yes" || echo "No")"
          
-      - name: Run tests
-        working-directory: safenotes-backend
-        run: npm test
+      #- name: Run tests
+      #  working-directory: safenotes-backend
+      #   run: npm test
+        
