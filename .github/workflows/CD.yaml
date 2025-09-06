@@ -1,26 +1,10 @@
-name: CD Pipeline
-
-on:
-  workflow_dispatch:   # Allows manual trigger
-  push:
-    branches:
-      - dev   # déploiement seulement quand tu push sur dev
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: dev 
+    environment: dev
     defaults:
       run:
-        working-directory: ./Configuration   # Tout run utilise ce répertoire par défaut
-
-
-    env:
-      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        working-directory: ./Configuration  # Par défaut, pour Terraform
 
     steps:
       - name: Checkout code
@@ -29,21 +13,15 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
-      # 🔑 Authentification avec Azure
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ env.AZURE_CREDENTIALS }}
-
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform plan
+      - name: Terraform Plan
         run: terraform plan
 
-      - name: Terraform format
+      - name: Terraform Format
         run: terraform fmt
-      
+
       - name: Terraform Apply
         run: terraform apply -auto-approve
 
@@ -52,17 +30,17 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install dependencies (backend)
+        working-directory: safenotes-backend
         run: npm install --production
+        
 
       - name: Build app (if needed)
+        working-directory: safenotes-backend
         run: npm run build --if-present
 
-      
-
-      # 🚀 Déploiement sur Azure App Service
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: "webapp-Safenotes"
-          package: .
+          package: ./safenotes-backend  # Ou chemin vers ton build si différent

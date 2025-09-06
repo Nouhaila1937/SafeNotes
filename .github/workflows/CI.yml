@@ -39,5 +39,4 @@ jobs:
           echo "CRYPTO_SECRET is set: $([[ -n "$CRYPTO_SECRET" ]] && echo "Yes" || echo "No")"
          
       - name: Run tests
-        working-directory: safenotes-backend/tests
         run: npm test
