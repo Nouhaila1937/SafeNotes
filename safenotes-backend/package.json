@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node safenotes-backend/server.js",
+    "start": "server.js",
     "test": "jest"
   },
   "repository": {
