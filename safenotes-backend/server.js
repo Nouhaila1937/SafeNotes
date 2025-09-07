@@ -5,7 +5,6 @@ const connectDB = require("./config/db");
 const notesRouter = require('./routes/notesRoutes');
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output.json"); // Fichier généré par swagger-autogen
-const verifyAzureToken = require('./middlewares/authMiddleware'); // <-- Middleware Azure AD
 
 // Connexion à MongoDB
 connectDB();
@@ -16,7 +15,7 @@ app.use(express.json()); // <-- Parse les requêtes JSON
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Routes sécurisées
-app.use('/api', verifyAzureToken, notesRouter);
+app.use('/api', notesRouter);
 
 // Gestion des erreurs
 app.use((err, req, res, next) => {
@@ -29,6 +28,5 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
 
 module.exports = app;

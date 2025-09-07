@@ -35,11 +35,10 @@ jobs:
           # Créer un fichier test pour vérifier que les dossiers sont correctement déployés
           echo "test file" > public/uploads/test.txt
           echo "test file" > files/uploads/test.txt
-
       - name: Deploy to Azure Web App using publish profile
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'webapp-Safenotes'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: safenotes-backend
-
+          
